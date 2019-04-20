@@ -1,0 +1,5 @@
+Navigate to this directory in your terminal and execute
+
+	"../../src/manage_blog.py --publish ../site_source/drafts/hello_world.md".
+
+This should create a basic file structure for this site. You should also delete this file.
