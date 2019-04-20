@@ -1,0 +1,82 @@
+:root {
+	--ome-background-color: black;
+	--ome-nav-color: #2C3539;
+	--ome-text-color: white;
+}
+html, body {
+	background-color: var(--ome-background-color);
+	color: var(--ome-text-color);
+	margin: 0;
+	font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+	font-size: 16px;
+}
+
+a {
+	color: var(--ome-text-color);
+}
+
+hr {
+	border-color: var(--ome-text-color);
+}
+
+p {
+	text-align: justify;
+}
+
+.container {
+	padding-left: 10em;
+	padding-right: 10em;
+	text-align: center;
+}
+
+article {
+	padding-bottom: 2em;
+	font-family: monospace;
+}
+
+.footer {
+	margin-left: 10em;
+	margin-right: 10em;
+}
+
+#index-footer {
+	font-family: monospace;
+	text-align: center;
+	margin-bottom: 5em;
+}
+
+nav {
+	background-color: var(--ome-nav-color);
+	padding: .2em;
+	border-radius: 10px;
+	font-family: monospace;
+	margin-bottom: 1em;
+}
+
+.nav-item {
+	list-style-type: none;
+	display: inline-block;
+}
+
+.archive-item {
+	list-style-type: none;
+	text-align: center;
+}
+
+.headshot {
+	width: 50%
+}
+
+.home-link {
+	text-decoration: none;
+}
+
+@media screen and (max-width: 800px) {
+	.container {
+		padding-left: 1em;
+		padding-right: 1em;
+	}
+	.headshot {
+		width: 100%;
+	}
+}
