@@ -173,8 +173,6 @@ def parse_markdown_file(file_path):
 				line = line
 			if line.startswith('#'):
 				line = transform_header(line)
-			elif line.startswith('- ') or line.startswith('+ ') or line.startswith('* '):
-				line = transform_list(line)
 			else:
 				line = transform_blocks(line)
 			_str += line
@@ -192,24 +190,21 @@ def transform_blocks(mkd):
 	re_emph = re.compile(r'((\*)(.+?)(\*))')
 	re_str = re.compile(r'((\*\*|__)(.+?)(\*\*|__))')
 	re_lnk = re.compile(r'\[(.*?)\]\((.+?)("(.*)")?\)')
+	re_quo = re.compile(r'(^\t.*$\n)+')
+	re_list = re.compile(r'((^-|\*|\+)\s(.*\n))+')
 
 	mkd = re.sub(re_hr, '<hr />', mkd)
 	mkd = re.sub(re_emph, r'<em>\3</em>', mkd)
 	mkd = re.sub(re_str, r'<strong>\3</strong>', mkd)
 	mkd = re.sub(re_lnk, r'<a href="\2" title="\4">\1</a>', mkd)
-	return mkd
-
-def transform_list(mkd):
-	mkd = transform_blocks(mkd)
-	step_one = re.compile(r'(^-|\*|\+)\s(.*)')
-	step_two = re.compile(r'(<li>.*<\/li>\n)+')
-
-	mkd = re.sub(step_one, r'<li>\2</li>', mkd)
-	mkd = re.sub(step_two, r'<ul>\1</ul>', mkd)
+	mkd = re.sub(re_quo, r'<blockquote class="justifed">\1</blockquote>', mkd)
+	mkd = re.sub(re_list, r'<li>\3</li>', mkd)
 	return mkd
 
 def wrap_paragraphs(html):
 	re_para = re.compile(r'^((?!^<))[^\r\n]+((\r|\n|\r\n)[^\r\n]+)*', re.MULTILINE)
+	re_list = re.compile(r'(<li>.*\n<\/li>)+', re.MULTILINE)
 
 	html = re.sub(re_para, '<p>\g<0></p>', html)
+	html = re.sub(re_list, '<ul class="unordered-inline">\g<0></ul>', html)
 	return html
