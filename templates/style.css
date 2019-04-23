@@ -81,6 +81,11 @@ nav {
 	list-style-position: inside;
 }
 
+.ordered-inline {
+	text-align: left;
+	list-style-position: inside;
+}
+
 @media screen and (max-width: 800px) {
 	.container {
 		padding-left: 1em;

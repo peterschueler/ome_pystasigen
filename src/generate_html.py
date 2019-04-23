@@ -193,18 +193,25 @@ def transform_blocks(mkd):
 	re_quo = re.compile(r'(^\t.*$\n)+')
 	re_list = re.compile(r'((^-|\*|\+)\s(.*\n))+')
 
+	re_olist = re.compile(r'^(\d+.\s)(.*)\n')
+
 	mkd = re.sub(re_hr, '<hr />', mkd)
 	mkd = re.sub(re_emph, r'<em>\3</em>', mkd)
 	mkd = re.sub(re_str, r'<strong>\3</strong>', mkd)
 	mkd = re.sub(re_lnk, r'<a href="\2" title="\4">\1</a>', mkd)
 	mkd = re.sub(re_quo, r'<blockquote class="justifed">\1</blockquote>', mkd)
 	mkd = re.sub(re_list, r'<li>\3</li>', mkd)
+	mkd = re.sub(re_olist, r'<li>\1\2</li>', mkd)
 	return mkd
 
 def wrap_paragraphs(html):
 	re_para = re.compile(r'^((?!^<))[^\r\n]+((\r|\n|\r\n)[^\r\n]+)*', re.MULTILINE)
+	re_olist = re.compile(r'(<li>)(\d+\.\s)(.*)(<\/li>)+')
+	re_linum = re.compile(r'<li>(\d+\.\s)')
 	re_list = re.compile(r'(<li>.*\n<\/li>)+', re.MULTILINE)
 
 	html = re.sub(re_para, '<p>\g<0></p>', html)
-	html = re.sub(re_list, '<ul class="unordered-inline">\g<0></ul>', html)
+	html = re.sub(re_olist, r'<ol class="ordered-inline">\g<0></ol>', html)
+	html = re.sub(re_linum, r'<li>', html)
+	html = re.sub(re_list, r'<ul class="unordered-inline">\g<0></ul>', html)
 	return html
