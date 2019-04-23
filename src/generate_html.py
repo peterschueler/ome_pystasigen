@@ -191,7 +191,7 @@ def transform_blocks(mkd):
 	re_hr = re.compile(r'^(\*|-)+\s?(\*|-)+\s?(\*|-)$')
 	re_emph = re.compile(r'((\*)(.+?)(\*))')
 	re_str = re.compile(r'((\*\*|__)(.+?)(\*\*|__))')
-	re_lnk = re.compile(r'\[(.*)\]\((.+?)\s?("(.*)")?\)')
+	re_lnk = re.compile(r'\[(.*?)\]\((.+?)("(.*)")?\)')
 
 	mkd = re.sub(re_hr, '<hr />', mkd)
 	mkd = re.sub(re_emph, r'<em>\3</em>', mkd)
@@ -200,6 +200,7 @@ def transform_blocks(mkd):
 	return mkd
 
 def transform_list(mkd):
+	mkd = transform_blocks(mkd)
 	step_one = re.compile(r'(^-|\*|\+)\s(.*)')
 	step_two = re.compile(r'(<li>.*<\/li>\n)+')
 
