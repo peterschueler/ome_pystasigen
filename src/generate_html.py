@@ -7,25 +7,26 @@ from datetime import datetime
 from _settings import *
 
 def generate_site():
-	''' Traverses the PUBLICATION_QUEUE and calls generate_post on items. Then calls generate_index.'''
+	''' Traverses the PUBLICATION_QUEUE and calls generate_post on items. Then calls generate_index and generate_feed.'''
 	feed_posts = []
 	archive_items = []
-	add_basics("{}/style.css".format(TEMPLATE_DIRECTORY))
 	Path(PUBLICATION_QUEUE).mkdir(parents=True, exist_ok=True)
+	valid_file_name = re.compile(r'\d{4}-\d\d-\d\d-\d\d-\d\d-\d\d_.*\.md')
 	for _file in sorted(Path(PUBLICATION_QUEUE).iterdir(), key=lambda f: f.stem, reverse=True):
-		if _file.stem == '.DS_Store':
-			# TODO: Replace with actual safeguard against badly formed filenames.
+		if re.match(valid_file_name, _file.name) == None:
 			continue
 		else:
 			generate_post(_file, "{}/post_template.html".format(TEMPLATE_DIRECTORY))
 			feed_posts.append(generate_feed_item(_file, '{}/feed_item_template.xml'.format(TEMPLATE_DIRECTORY)))
 			archive_items.append(generate_archive_item(_file, '{}/archive_item_template.html'.format(TEMPLATE_DIRECTORY)))
+
+	generate_style("{}/style.css".format(TEMPLATE_DIRECTORY))
 	generate_index(PUBLISHED_DIRECTORY, "{}/index_template.html".format(TEMPLATE_DIRECTORY))
 	generate_about("{}/about.html".format(TEMPLATE_DIRECTORY))
 	generate_feed(feed_posts, "{}/feed_template.xml".format(TEMPLATE_DIRECTORY))
 	generate_archive(archive_items, "{}/archive_template.html".format(TEMPLATE_DIRECTORY))
 
-def add_basics(path_to_style):
+def generate_style(path_to_style):
 	with open(path_to_style, 'r') as _st:
 		with open('style.css', 'w') as _target:
 			_target.write(_st.read())
