@@ -1,7 +1,12 @@
 :root {
-	--ome-background-color: black;
-	--ome-nav-color: #2C3539;
-	--ome-text-color: white;
+	--ome-background-color: #6F1459;
+	--ome-detail-color: #580F45;
+	--ome-detail-color-alt: #8D4279;
+	--ome-detail-color-dark: #4A0C39;
+	--ome-border-color: #5E184B;
+	--ome-text-color: #E4D09B;
+	--ome-text-color-dark: #D2AC41;
+	--ome-nav-color: #61124C;
 }
 html, body {
 	background-color: var(--ome-background-color);
