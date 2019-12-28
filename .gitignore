@@ -1,5 +1,12 @@
+# General
+
 __pycache__/
 *.py[cod]
 *.log
 *.bbprojectd
 .DS_STORE
+
+# Related To Project
+
+settings.py
+templates/
