@@ -4,7 +4,7 @@ import argparse
 from datetime import datetime
 from pathlib import Path
 
-from _settings import PUBLICATION_QUEUE
+from settings import PUBLICATION_QUEUE
 from generate_html import generate_site
 
 parser = argparse.ArgumentParser()

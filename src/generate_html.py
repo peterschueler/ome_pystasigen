@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 from datetime import datetime
 
-from _settings import *
+from settings import *
 
 def generate_site():
 	''' Traverses the PUBLICATION_QUEUE and calls generate_post on items. Then calls generate_index.'''
