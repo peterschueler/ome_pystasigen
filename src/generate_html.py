@@ -186,32 +186,48 @@ def transform_header(mkd):
 	return mkd
 
 def transform_blocks(mkd):
+	re_open_brck = re.compile("<(?!img)")
+	re_close_brck = re.compile("([^\/])>")
 	re_hr = re.compile(r'^(\*|-)+\s?(\*|-)+\s?(\*|-)$')
 	re_emph = re.compile(r'((\*)(.+?)(\*))')
 	re_str = re.compile(r'((\*\*|__)(.+?)(\*\*|__))')
 	re_lnk = re.compile(r'\[(.*?)\]\((.+?)("(.*)")?\)')
-	re_quo = re.compile(r'(^\t.*$\n)+')
+
+	re_quo = re.compile(r'((`)(.+?)(`))')
 	re_list = re.compile(r'((^-|\*|\+)\s(.*\n))+')
 
 	re_olist = re.compile(r'^(\d+.\s)(.*)\n')
 
+	mkd = re.sub(re_open_brck, '&lt;', mkd)
+	mkd = re.sub(re_close_brck, r'\1&gt;', mkd)
 	mkd = re.sub(re_hr, '<hr />', mkd)
 	mkd = re.sub(re_emph, r'<em>\3</em>', mkd)
 	mkd = re.sub(re_str, r'<strong>\3</strong>', mkd)
 	mkd = re.sub(re_lnk, r'<a href="\2" title="\4">\1</a>', mkd)
-	mkd = re.sub(re_quo, r'<blockquote class="justifed">\1</blockquote>', mkd)
+
+	mkd = re.sub(re_quo, r'<code>\3</code>', mkd)
 	mkd = re.sub(re_list, r'<li>\3</li>', mkd)
 	mkd = re.sub(re_olist, r'<li>\1\2</li>', mkd)
 	return mkd
 
 def wrap_paragraphs(html):
-	re_para = re.compile(r'^((?!^<))[^\r\n]+((\r|\n|\r\n)[^\r\n]+)*', re.MULTILINE)
+	re_code_block = re.compile(r'^((^\t))[^\r\n]+((\r|\n|\r\n)[^\r\n]+)*', re.MULTILINE)
+	re_code_line = re.compile(r'\t(.*)')
+	re_block_quote = re.compile(r'^((^>))[^\r\n]+((\r|\n|\r\n)[^\r\n]+)\n*', re.MULTILINE)
+	re_block_artifact_1 = re.compile(r'<p>>')
+	re_block_artifact_2 = re.compile(r'blockquote>>')
+	re_para = re.compile(r'^((?!^<|\t))[^\r\n]+((\r|\n|\r\n)[^\r\n]+)*', re.MULTILINE)
 	re_olist = re.compile(r'(<li>)(\d+\.\s)(.*)(<\/li>)+')
 	re_linum = re.compile(r'<li>(\d+\.\s)')
 	re_list = re.compile(r'(<li>.*\n<\/li>)+', re.MULTILINE)
+	re_artifact = re.compile(r'(<.*>)>')
 
-	html = re.sub(re_para, '<p>\g<0></p>', html)
+	html = re.sub(re_block_quote, r'<blockquote>\g<0></blockquote>\n', html)
+	html = re.sub(re_para, '<p>\g<0>\n</p>', html)
+	html = re.sub(re_code_block, r'<pre>\n\g<0>\n</pre>', html)
+	html = re.sub(re_code_line, '<code>\g<1></code>', html)
 	html = re.sub(re_olist, r'<ol class="ordered-inline">\g<0></ol>', html)
 	html = re.sub(re_linum, r'<li>', html)
 	html = re.sub(re_list, r'<ul class="unordered-inline">\g<0></ul>', html)
+	html = re.sub(re_artifact, r'\g<1>', html)
 	return html
