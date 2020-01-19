@@ -2,6 +2,8 @@ from pathlib import Path
 from PIL import Image
 
 from settings import *
+
+F_DIR = "/files/images/photography"
 		
 def generate_thumbnails(image_dir, sizes):
 	image_list = [p for p in Path(image_dir).iterdir() if p.is_file() and \
@@ -22,23 +24,23 @@ def generate_relative_links(image_dir):
 		'thumb' not in p.name and p.suffix == '.jpg']
 	imgs = {}
 	for img in image_list:
-		imgs[img.stem] = {'full': "{}/{}".format(PHOTOGRAPHY_URL, img.name), \
-							'large': "{}_thumb_{}{}".format(img.stem, 'large', img.suffix),
-							'medium': "{}_thumb_{}{}".format(img.stem, 'medium', img.suffix),
-							'small': "{}_thumb_{}{}".format(img.stem, 'small', img.suffix)}
+		imgs[img.stem] = {'full': "{}/{}.html".format(PHOTOGRAPHY_URL, img.stem), \
+							'large': "{}/{}_thumb_{}{}".format(F_DIR, img.stem, 'large', img.suffix),
+							'medium': "{}/{}_thumb_{}{}".format(F_DIR, img.stem, 'medium', img.suffix),
+							'small': "{}/{}_thumb_{}{}".format(F_DIR, img.stem, 'small', img.suffix)}
 	return imgs
 	
 def generate_html_list(images):
 	html = "\t<div class=image-box>\n"
 	for img in images.items():
 		print(img)
-		img_tag = "\t\t<a href={}><img src='{}' class=image /></a>\n".format(img[1]['full'], img[1]['medium'])
+		img_tag = "\t\t<a href='{}'><img src='{}' class=image /></a>\n".format(img[1]['full'], img[1]['medium'])
 		html += img_tag
 	html += "\n\t</div>"
 	return html
 	
 def generate_html_for_image(image):
-	return "\t<img src='{}/{}' class=image />\n".format(PHOTOGRAPHY_URL, image)
+	return "\t<img src='{}/{}.jpg' class=image />\n".format(F_DIR, image)
 	
 def generate_photography_site(path_to_template):
 	images = generate_html_list(generate_relative_links(IMAGE_DIRECTORY))

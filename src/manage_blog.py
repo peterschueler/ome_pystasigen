@@ -36,7 +36,7 @@ def main():
 	if args.regenerate != None:
 		generate_site()
 		generate_photography()
-	if args.publish_pictures != None:
+	if args.publish_images != None:
 		generate_photography()
 
 if __name__ == '__main__':
