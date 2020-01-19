@@ -1,7 +1,7 @@
 from pathlib import Path
 from PIL import Image
 
-from _settings import *
+from settings import *
 		
 def generate_thumbnails(image_dir, sizes):
 	image_list = [p for p in Path(image_dir).iterdir() if p.is_file() and \
